@@ -1,0 +1,9 @@
+# LaTeX Junk
+*.aux
+*.log
+*.fdb*
+*.out
+*.fls
+
+# Vim junk
+*.swp
