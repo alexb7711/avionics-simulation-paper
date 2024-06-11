@@ -27,7 +27,7 @@ FIGURES_PDF     = $(patsubst %.tex, %.pdf, $(FIGURES_TEX))
 
 ##------------------------------------------------------------------------------
 #
-all: $(SRC) ## Build full thesis (LaTeX + figures)
+all: $(FIGURES_PDF) $(SRC) ## Build full thesis (LaTeX + figures)
 	@printf "Generating $(TARGET)...\n"
 	@latexmk -pdf main.tex
 
