@@ -3,23 +3,25 @@
 ##==============================================================================
 # CONFIGURATION
 ##==============================================================================
-.PHONY = clean help images set-version
+.PHONY     = clean help images set-version
 MAKEFLAGS := --jobs=4
-SHELL  = /bin/bash
+SHELL      = /bin/bash
 
 ##==============================================================================
 # DIRECTORIES
 ##==============================================================================
-IMG     = img
+IMG = img
 
 ##==============================================================================
 # FILES
 ##==============================================================================
-DOC_SRC         = main.tex
-TARGET          = sa-pap.pdf
-SRC             = $(shell find . -type f -name "*.tex")
-FIGURES_TEX     = $(wildcard $(IMG)/*tex)
-FIGURES_PDF     = $(patsubst %.tex, %.pdf, $(FIGURES_TEX))
+DOC_SRC          = main.tex
+TARGET           = main.pdf
+SRC              = $(shell find . -type f -name "*.tex")
+FIGURES_TEX      = $(wildcard $(IMG)/*tex)
+FIGURES_PUML     = $(wildcard $(IMG)/*puml)
+FIGURES_PUML_PNG = $(patsubst %.puml, %.png, $(FIGURES_PUML))
+FIGURES_TEX_PDF  = $(patsubst %.tex, %.pdf, $(FIGURES_TEX))
 
 ##==============================================================================
 # RECIPES
@@ -27,7 +29,7 @@ FIGURES_PDF     = $(patsubst %.tex, %.pdf, $(FIGURES_TEX))
 
 ##------------------------------------------------------------------------------
 #
-all: $(FIGURES_PDF) $(SRC) ## Build full thesis (LaTeX + figures)
+all: $(FIGURES_TEX_PDF) $(FIGURES_PUML_PNG) $(SRC) $(TARGET) ## Build full thesis (LaTeX + figures)
 	@printf "Generating $(TARGET)...\n"
 	@latexmk -pdf main.tex
 
@@ -43,7 +45,7 @@ set-version: ## Stamp the document with date and git commit hash
 ##------------------------------------------------------------------------------
 #
 clean:	## Clean LaTeX and output figure files
-	@rm -f $(FIGURES_PDF)
+	@rm -f $(FIGURES_TEX_PDF)  $(FIGURES_PUML_PNG)
 	@rm -f $(patsubst %.pdf, %.aux, $(FIGURES_PDF))
 	@rm -f $(patsubst %.pdf, %.log, $(FIGURES_PDF))
 	@rm -f $(TARGET)
@@ -74,8 +76,13 @@ help:  ## Auto-generated help menu
 #
 %.pdf: %.tex  ## Figures for the manuscript
 	@printf "Generating %s...\033[K\r" "$@"
-	@pdflatex -shell-escape -interaction=nonstopmode -output-directory $(IMG) "$<" | \
-	grep "^!" -A20 --color=always || true
+	@pdflatex -shell-escape -interaction=nonstopmode -output-directory $(IMG) "$<"
+
+##------------------------------------------------------------------------------
+#
+%.png: %.puml  ## Figures for the manuscript
+	@printf "Generating %s...\033[K\r" "$@"
+	@plantuml -tpng "$<"
 
 ##------------------------------------------------------------------------------
 #
