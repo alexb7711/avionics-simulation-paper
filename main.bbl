@@ -1,0 +1,18 @@
+\begin{thebibliography}{1}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Levis and Wagenhals()]{levis_c4isr_2000}
+A.~H. Levis and L.~W. Wagenhals.
+\newblock C4isr architectures: I. developing a process for c4isr architecture
+  design.
+\newblock 3\penalty0 (4):\penalty0 225--247.
+\newblock ISSN 1098-1241, 1520-6858.
+\newblock \doi{10.1002/1520-6858(2000)3:4<225::AID-SYS4>3.0.CO;2-#}.
+\newblock URL
+  \url{https://onlinelibrary.wiley.com/doi/10.1002/1520-6858%282000%293%3A4%3C225%3A%3AAID-SYS4%3E3.0.CO%3B2-%23}.
+
+\end{thebibliography}

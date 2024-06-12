@@ -9,3 +9,5 @@
 
 # Vim junk
 *.swp
+main.bbl
+main.blg
