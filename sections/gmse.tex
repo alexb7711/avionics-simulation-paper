@@ -26,16 +26,16 @@ packages. Packages describes software that are composed of multiple modules whic
 designed to perform a specialized task\footnote{This process can be extended ad nauseam to further
 and further decompose items until its most primitive forms are derived. That will be avoided as much
 as possible to keep the discussion relevant to the critical components.}. At the subsystem level,
-there are three main packages: Core Avionics\footnote{Often times these modules are also referred to
-as subsystems}, External Sensors and Modules, as of course the GMSE. The modules and their
-interconnectivity is shown in \autoref{fig:operational-architecture}. The core avionics module
-describes the suite of software being developed that that has immediate agency to the behavior of
-the avionics system. For example, the Avionics Data Computer (ADC) is the "brain" of the avionics
-system. It contains the vehicle's perceived external state as well as its internal operating state.
-It also supplies flow of data at the correct rate to the correct system. The Flight Control Module
-(FCM) utilizes the data from the ADC to assist in maintaining stability and controlling the vehicle
-to the waypoints described by the planning algorithms utilized by the Flight Navigation Module
-(FNC).
+there are three main packages: Core Avionics\footnote{Often times modules associated with core
+avionics are also referred to as subsystems}, External Sensors and Modules, as of course the GMSE.
+The modules and their interconnectivity is shown in \autoref{fig:operational-architecture}. The core
+avionics module describes the suite of software being developed that that has immediate agency to
+the behavior of the avionics system. For example, the Avionics Data Computer (ADC) is the "brain" of
+the avionics system. It contains the vehicle's perceived external state as well as its internal
+operating state. It also supplies flow of data at the correct rate to the correct system. The Flight
+Control Module (FCM) utilizes the data from the ADC to assist in maintaining stability and
+controlling the vehicle to the waypoints described by the planning algorithms utilized by the Flight
+Navigation Module (FNC).
 
 For the core avionics to function in the real world, a sense of the vehicle's immediate surroundings
 must be established via various sensors and external modules. In particular, the sensors (more often
@@ -60,6 +60,16 @@ in \autoref{sec:sdsip}.
 \caption{}
 \label{fig:operational-architecture}
 \end{figure*}
+
+The GMSE package consists of several modules\footnote{Probably better described as packages as well,
+but for the sake of description these components will be referred to as modules.} as depicted in
+\autoref{fig:operational-architecture}. These modules are the GMSE driver, log, and physics engine.
+The driver module is the part of the GMSE package that initializes the simulation, spawns all the
+required processes, and ensures the correct modeled external modules and sensors are updated at the
+correct times. The logging module of the GMSE package inputs both the avionics data and the raw data
+created by the physics engine. The physics engine module is the back end that models the world
+components such as the physical location of the aircraft, wind and other disturbances, as well as
+obstacles. The
 
 \subsection{Systems Architecture}
 \label{sec:systems-architecture}
