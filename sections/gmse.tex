@@ -62,18 +62,99 @@ in \autoref{sec:sdsip}.
 \label{fig:operational-architecture}
 \end{figure*}
 
-The GMSE package consists of several modules\footnote{Probably better described as packages as well,
-but for the sake of description these components will be referred to as modules.} as depicted in
-\autoref{fig:operational-architecture}. These modules are the GMSE driver, log, and physics engine.
-The driver module is the part of the GMSE package that initializes the simulation, spawns all the
-required processes, and ensures the correct modeled external modules and sensors are updated at the
-correct times. The logging module of the GMSE package inputs both the avionics data and the raw data
-created by the physics engine. The physics engine module is the back end that models the world
-components such as the physical location of the aircraft, wind and other disturbances, as well as
-obstacles.
+\subsection{Systems Architecture} \label{sec:systems-architecture}
 
-\subsection{Systems Architecture}
-\label{sec:systems-architecture}
+The GMSE package consists of several packages as depicted in \autoref{fig:operational-architecture}.
+These modules are the GMSE driver, logger, and physics engine. The driver module is the part of the
+GMSE package that initializes the simulation, spawns all the required processes, and ensures the
+correct modeled external modules and sensors are updated at the correct times. The logging module of
+the GMSE package inputs both the avionics data and the raw data created by the physics engine. The
+physics engine module is the back end that models the world components such as the physical location
+of the aircraft, wind and other disturbances, as well as obstacles. Each of these packages are to be
+described in further detail in the subsequent sections.
+
+\subsubsection{GMSE Driver}
+
+The GMSE driver is the core of the GMSE. The driver package provides the following functionality:
+
+\begin{enumerate}
+  \item Initialization
+    \begin{itemize}
+      \item SDSIP (i.e. communications package),
+      \item initialize the state of the ``world'', and
+      \item initialize the state of ``ownship''
+    \end{itemize}
+  \item Spawn
+  \begin{itemize}
+    \item GMSE physics engine
+    \item sensor and external modules and
+    \item core avionics
+  \end{itemize}
+  \item Execution
+    \begin{itemize}
+      \item GMSE loggers,
+      \item GMSE physics engine, and
+      \item mock sensor modules
+    \end{itemize}
+\end{enumerate}
+
+Beginning with the initialization process, the GMSE driver module is meant to provide all the
+information that the simulation requires to function. The initialization begins by executing SDSIP
+to generate the required code to interface with the ``device drivers'', publishers, and subscribers.
+The initialization process is as described in \autoref{sec:sdsip}. The GMSE driver also provides
+the required parameters to the physics engine so that it can initialize the ``state of the world''.
+That is, there exist YAML files specifying positional factors such as initial coordinate frames
+positions and orientations, and obstacle locations and dimensions. There exist other YAML files
+specifying the physical aspects such as wind speeds and directions, as well as physical parameters
+to describe the behavior of the avionics systems being modeled. The core avionics must be
+initialized so that the ``world state'' aligns with the ``ownship'' state (i.e. the positioning and
+sensing done by the simulated avionics is consistent with the physics engine world state). As an
+example, if one desires to test flight maneuvers, one may wish to initialise the system in a way
+that allows the vehicle to perform the maneuver promptly (i.e. mid-flight at a specified speed and
+altitude to perform a loop).
+
+After initialization has been completed, the GMSE driver process begins to spawn processes and
+threads required to execute the simulation process. The physics engine is created as that is the
+package that propagates and maintains the current state of the ``world''. The sensors and external
+modules are then created to be able to ``perceive'' the wold from the vehicle's perspective. Finally
+the core avionics is created.
+
+With all the required packages instantiated, now the simulation may begin execution. The physics
+engine is executed first to propagate the state of the world and ownship forward by a some discrete
+step size. The sensors and external modules are then provided the "world state" data which is then
+the core avionics may utilize. It is important to note that the core avionics is not included in the
+execution. That is, while the core avionics process is spawned from the driver module during the
+``spawn'' phase, it is not being being driven by GMSE. In other words, the core avionics is spawned
+as a sub-process that is executing independently of GMSE. This is done to simulate as if the core
+avionics were embedded on a physical system that is merely receiving external inputs.
+
+In the following sections, further description about the systems architecture for each of the
+packages is provided.
+
+\subsubsection{GMSE Logger}
+
+The GMSE logger maintains the responsibility of ``sniffing'' all the traffic that is generated from
+the physics engine and transmitted via SDSIP and storing them in respective databases labeled
+``raw'' and ``avionics'' data, respectively. In other words, the GMSE logger acts both as a flight
+recorder for both the simulated vehicle and for the physics engine. Both pieces of data are logged
+in their respective databases so that the raw data generated by the physics engine (i.e. the input)
+can be compared to the resulting avionics response (i.e. the output).
+
+Once the data has been written to their respective databases, generic or custom plotting or logging
+modules may written to glean information on what the physics engine is generating as well as monitor
+the real-time behavior of the avionics system.
+
+\subsubsection{GMSE Physics Engine}
+
+The physics engine can be thought of as the ``back end'' of the GMSE. The physics engine can be
+implemented utilizing various different methods, such as polynomial models, multipoint models, and
+tabular models \cite{banks_discussion_nodate}. However, regardless of how any particular model may
+maintain the world state internally, certain information must be exposed in a general manner such
+that the sensing modules may be able to retrieve its required information from the ``world''. Such
+information, while not exhaustive, includes: airspeed, yaw, pitch, altitude, etc. The physics engine
+is also responsible for estimating the forces applied to the vehicle. These forces will then in turn
+alter the vehicles position, velocity, and acceleration vectors forcing a response from the core
+avionics system.
 
 \subsection{Technical Architecture} \label{sec:technical-architecture}
 

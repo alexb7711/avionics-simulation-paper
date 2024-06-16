@@ -30,7 +30,7 @@ FIGURES_TEX_PDF  = $(patsubst %.tex, %.pdf, $(FIGURES_TEX))
 #
 all: $(FIGURES_TEX_PDF) $(FIGURES_PUML_PNG) $(SRC) $(TARGET) ## Build full thesis (LaTeX + figures)
 	@printf "Generating $(TARGET)...\n"
-	@latexmk -pdf main.tex
+	@latexmk -pdf $(DOC_SRC)
 
 ##------------------------------------------------------------------------------
 # Resources:
@@ -44,12 +44,11 @@ set-version: ## Stamp the document with date and git commit hash
 ##------------------------------------------------------------------------------
 #
 clean:	## Clean LaTeX and output figure files
+	@latexmk -C $(DOC_SRC)
 	@rm -f $(FIGURES_TEX_PDF)  $(FIGURES_PUML_PNG)
 	@rm -f $(patsubst %.pdf, %.aux, $(FIGURES_PDF))
 	@rm -f $(patsubst %.pdf, %.log, $(FIGURES_PDF))
 	@rm -f $(TARGET)
-	@latexmk -silent -C $(DOC_SRC)
-
 
 ##------------------------------------------------------------------------------
 #
