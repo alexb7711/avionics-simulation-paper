@@ -156,5 +156,21 @@ is also responsible for estimating the forces applied to the vehicle. These forc
 alter the vehicles position, velocity, and acceleration vectors forcing a response from the core
 avionics system.
 
+\subsubsection{GMSE Driver}
+
+The GMSE driver can be thought of the ``glue'' that holds all the pieces together. The driver
+package is responsible for ensuring all the required executables are running, initializing each
+package with the appropriate data, and providing the required data to the sensing and
+external modules at the correct time and, in turn, providing the data to the core avionics in a
+timely manner.
+
+The external sensors and modules are instantiated as threads from the GMSE driver. These processes
+are created in this manner because GMSE is in charge of the timing in which these components are
+executed, but it is desired that when they run, these modules run independently to GMSE so that
+timing requirements are met. This is juxtaposed to the core avionics being instantiated as a
+separate process. The core avionics being run as a separate process is meant to enforce the fact
+that the core avionics is disjoint from GMSE, and to further emphasize that the core avionics is
+acting only on the inputs that would be received during operation.
+
 \subsection{Technical Architecture} \label{sec:technical-architecture}
 
