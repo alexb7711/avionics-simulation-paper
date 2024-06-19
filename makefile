@@ -16,7 +16,8 @@ IMG = img
 ##==============================================================================
 DOC_SRC          = main.tex
 TARGET           = main.pdf
-SRC              = $(shell find . -type f -name "*.tex")
+SRC             := $(shell find sections/ -type f -name "*.tex")
+SRC             += $(DOC_SRC)
 FIGURES_TEX      = $(wildcard $(IMG)/*tex)
 FIGURES_PUML     = $(wildcard $(IMG)/*puml)
 FIGURES_PUML_PNG = $(patsubst %.puml, %.png, $(FIGURES_PUML))
@@ -28,7 +29,7 @@ FIGURES_TEX_PDF  = $(patsubst %.tex, %.pdf, $(FIGURES_TEX))
 
 ##------------------------------------------------------------------------------
 #
-all: $(FIGURES_TEX_PDF) $(FIGURES_PUML_PNG) $(SRC) $(TARGET) ## Build full thesis (LaTeX + figures)
+all: $(FIGURES_TEX_PDF) $(FIGURES_PUML_PNG) $(SRC) ## Build full thesis (LaTeX + figures)
 	@printf "Generating $(TARGET)...\n"
 	@latexmk -pdf $(DOC_SRC)
 
@@ -72,7 +73,7 @@ help:  ## Auto-generated help menu
 
 ##------------------------------------------------------------------------------
 #
-%.pdf: %.tex  ## Figures for the manuscript
+$(IMG)/%.pdf: %.tex  ## Figures for the manuscript
 	@printf "Generating %s...\033[K\r" "$@"
 	@pdflatex -shell-escape -interaction=nonstopmode -output-directory $(IMG) "$<"
 

@@ -1,0 +1,43 @@
+@startuml
+package "SDSIP" {
+[Search]
+[Generate]
+}
+
+
+cloud "Source Code" {
+}
+
+package "Core Avionics" {
+package "ADC" {
+package "SDSIP Framework" {
+[Transmit]
+[Recieve]
+}
+
+Database "Data" {
+}
+
+}
+[FCM]
+[FNC]
+}
+
+Folder "External Sensors and Modules" {
+[INS]
+[GPS]
+[Radar]
+}
+
+[Recieve] <-- [Core Avionics]
+[Recieve] <-- [External Sensors and Modules]
+[Transmit] --> [Core Avionics]
+[Transmit] --> [External Sensors and Modules]
+[Data] <-- [Recieve]
+[Data] --> [Transmit]
+[Search]  <-- [Source Code]
+[Generate]  --> [Source Code]
+[Search]  --> [Generate]
+
+@enduml
+

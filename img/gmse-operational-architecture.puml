@@ -28,7 +28,7 @@ Folder "External Sensors and Modules" {
 [Radar]
 }
 
-[Core Avionics] <-down-> [GMSE]
+[Core Avionics] <-right-> [GMSE]
 [GMSE] <-left-> [External Sensors and Modules]
 [Log] -down-> [Avionics Data]
 [Physics Engine] -down-> [Raw Data]
