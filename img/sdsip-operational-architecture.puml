@@ -38,6 +38,6 @@ Folder "External Sensors and Modules" {
 [Search]  <-- [Source Code]
 [Generate]  --> [Source Code]
 [Search]  --> [Generate]
+[SDSIP] -right
 
 @enduml
-
