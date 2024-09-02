@@ -33,13 +33,7 @@ at the correct rate to the correct system. The Flight Control Module (FCM) utili
 maintaining stability and controlling the vehicle to the waypoints described by the planning algorithms utilized by the
 Flight Navigation Module (FNC).
 
-For the core avionics to function in the real world, a sense of the vehicle's immediate surroundings must be established
-via various sensors and external modules. In particular, the sensors (more often than not) are off-the-shelf products
-that require integration with the core avionics. The sensors in this package may contain software modules either that
-mimic the behavior of a sensor, or include the physical sensor in-the-loop of the simulation. This software package also
-contains ``external modules'' which are other off-the-shelf components that require integration into the core avionics. As
-an example, if one desires to incorporate data linking to transfer data in real-time to a base station, the physical
-device to transfer the data via radio frequency (RF) would be included as an ``external module''.
+For the core avionics to function in the real world, a sense of the vehicle's immediate surroundings must be established via various sensors and external modules. In particular, the sensors (more often than not) are off-the-shelf products that require integration with the core avionics. The sensors in this package may contain software modules either that mimic the behavior of a sensor, or include the physical sensor in-the-loop of the simulation. This software package also contains ``external modules'' which are other off-the-shelf components that require integration into the core avionics. As an example, if one desires to incorporate data linking to transfer data in real-time to a base station, the physical device to transfer the data via radio frequency (RF) would be included as an ``external module''.
 
 The objective of the GMSE package is to drive both the sensor modules and core avionics by spawning all the necessary
 processes, executing tasks at their scheduled times, calculating the ``state of the world'', calculating the state of
